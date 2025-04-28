@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Bienvenue dans l'application de comptabilité</h1>
+    <p>Un système de gestion comptable modulaire basé sur Django.</p>
+    <div class="mt-4">
+        <a href="{% url 'admin:index' %}" class="btn btn-primary">Administration</a>
+        <a href="{% url 'account_list' %}" class="btn btn-secondary">Liste des comptes</a>
+    </div>
+</div>
+{% endblock %}

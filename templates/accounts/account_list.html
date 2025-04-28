@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Plan comptable</h1>
+    
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" id="account-search" class="form-control" placeholder="Rechercher un compte...">
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="{% url 'account_create' %}" class="btn btn-primary">Nouveau compte</a>
+        </div>
+    </div>
+    
+    <div class="account-tree">
+        {% for class in account_classes %}
+        <div class="account-class">
+            <div class="class-header" data-class-id="{{ class.number }}">
+                <span class="expand-icon">+</span>
+                <strong>{{ class.number }} - {{ class.name }}</strong>
+            </div>
+            <div class="account-groups" id="class-{{ class.number }}-groups" style="display: none;">
+                {% for group in class.groups.all %}
+                <div class="account-group">
+                    <div class="group-header" data-group-id="{{ group.id }}">
+                        <span class="expand-icon">+</span>
+                        <strong>{{ group.get_full_number }} - {{ group.name }}</strong>
+                    </div>
+                    <div class="accounts" id="group-{{ group.id }}-accounts" style="display: none;">
+                        {% for account in group.accounts.all %}
+                        <div class="account-item {% if account.is_active %}active{% else %}inactive{% endif %}">
+                            <a href="{% url 'account_detail' account.id %}">
+                                {{ account.get_full_number }} - {{ account.name }}
+                            </a>
+                        </div>
+                        {% empty %}
+                        <div class="no-accounts">Aucun compte dans ce groupe</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'accounts/js/accounts.js' %}"></script>
+{% endblock %}

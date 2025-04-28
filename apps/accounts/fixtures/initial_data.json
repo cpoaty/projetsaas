@@ -1,0 +1,42 @@
+[
+    {
+      "model": "accounts.accountclass",
+      "pk": 1,
+      "fields": {
+        "name": "Comptes de capitaux",
+        "description": "Capitaux propres, emprunts et dettes assimilées"
+      }
+    },
+    {
+      "model": "accounts.accountclass",
+      "pk": 2,
+      "fields": {
+        "name": "Comptes d'immobilisations",
+        "description": "Immobilisations incorporelles, corporelles et financières"
+      }
+    },
+    {
+      "model": "accounts.accountgroup",
+      "pk": 1,
+      "fields": {
+        "account_class": 1,
+        "number": 0,
+        "name": "Capital et réserves",
+        "description": "Capital, réserves et report à nouveau"
+      }
+    },
+    {
+      "model": "accounts.accounttype",
+      "pk": "actif",
+      "fields": {
+        "name": "Actif"
+      }
+    },
+    {
+      "model": "accounts.accounttype",
+      "pk": "passif",
+      "fields": {
+        "name": "Passif"
+      }
+    }
+  ]

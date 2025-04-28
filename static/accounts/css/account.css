@@ -1,0 +1,52 @@
+.account-tree {
+    margin-top: 20px;
+}
+
+.account-class, .account-group {
+    margin-bottom: 10px;
+}
+
+.class-header, .group-header {
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.class-header:hover, .group-header:hover {
+    background-color: #e9ecef;
+}
+
+.account-groups, .accounts {
+    padding-left: 25px;
+    margin-top: 5px;
+}
+
+.account-item {
+    padding: 6px 12px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+}
+
+.account-item:hover {
+    background-color: #f1f3f5;
+}
+
+.account-item.inactive {
+    color: #6c757d;
+    text-decoration: line-through;
+}
+
+.expand-icon {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.no-accounts {
+    font-style: italic;
+    color: #6c757d;
+    padding: 5px 0;
+}
