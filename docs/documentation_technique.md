@@ -75,8 +75,11 @@ compta_project/                  # Dossier racine du projet
 │   ├── home.html
 │   ├── admin/                   # Templates personnalisés pour l'administration
 │   │   └── accounts/
-│   │       └── accountclass/
-│   │           └── change_form.html  # Template personnalisé pour les classes de compte
+│   │       ├── accountclass/
+│   │       │   └── change_form.html  # Template personnalisé pour les classes de compte
+│   │       └── accountgroup/
+│   │           ├── change_form.html  # Template personnalisé pour les groupes de compte
+│   │           └── add_form.html     # Template personnalisé pour l'ajout de groupes
 │   └── accounts/
 │       ├── account_list.html
 │       └── account_form.html
@@ -97,12 +100,15 @@ compta_project/                  # Dossier racine du projet
 1. **AccountClass** - Classes de comptes (niveau 1 du plan comptable OHADA)
    - Attributs: number (PK), name, description, position_bilan, actif, date_creation
    - Exemple: 1 - Comptes de ressources durables
-   - **Nouveauté**: Implémentation automatique des règles OHADA pour la position dans le bilan
-   - **Nouveauté**: Génération automatique des noms et descriptions selon le plan comptable OHADA
+   - **Fonctionnalité**: Implémentation automatique des règles OHADA pour la position dans le bilan
+   - **Fonctionnalité**: Génération automatique des noms et descriptions selon le plan comptable OHADA
 
 2. **AccountGroup** - Groupes de comptes (niveau 2 du plan comptable)
-   - Attributs: account_class (FK), number, name, description
-   - Exemple: 10 - Capital et réserves
+   - Attributs: account_class (FK), number, name, description, actif, date_creation
+   - Exemple: 10 - Capital
+   - **Nouveauté**: Validation automatique de la cohérence entre le numéro de groupe et la classe
+   - **Nouveauté**: Interface dynamique avec mise à jour des options en fonction de la classe sélectionnée
+   - **Nouveauté**: Prévisualisation en temps réel du nom et de la description générés automatiquement
 
 3. **AccountType** - Types de comptes
    - Attributs: code (PK), name
@@ -134,14 +140,21 @@ compta_project/                  # Dossier racine du projet
 
 Module d'administration modulaire avec des classes personnalisées pour chaque modèle :
 
-- **AccountClassAdmin** (Mise à jour récente)
+- **AccountClassAdmin**
   - Interface améliorée avec prévisualisation en temps réel des informations OHADA
   - Seul le numéro de classe est modifiable, tout le reste est généré automatiquement
   - Implémentation d'une API JavaScript pour la mise à jour dynamique des informations
   - Template personnalisé pour injecter le JavaScript nécessaire
   - Affichage des libellés OHADA officiels dans la liste des classes
 
-- AccountGroupAdmin
+- **AccountGroupAdmin** (Nouvelle implémentation)
+  - Interface dynamique avec filtrage des numéros de groupe en fonction de la classe sélectionnée
+  - Prévisualisation en temps réel du nom et de la description du groupe
+  - Validation automatique de la cohérence entre le numéro de groupe et la classe sélectionnée
+  - Implémentation d'une API REST pour récupérer les options de groupe et leurs informations
+  - Utilisation de templates personnalisés pour l'ajout et la modification des groupes
+  - Interface utilisateur intuitive qui guide l'utilisateur dans la création de groupes valides
+
 - AccountTypeAdmin
 - AccountAdmin
 
@@ -192,12 +205,13 @@ Formulaire de création/modification de compte avec:
 
 ### Interface d'administration personnalisée
 
-**Nouveauté**: Interface d'administration améliorée pour les classes de compte :
-- Prévisualisation en temps réel du nom, de la description et de la position dans le bilan
-- Formulaire simplifié où seul le numéro est modifiable
+**Nouveauté**: Interface d'administration améliorée pour les classes et groupes de comptes :
+- Prévisualisation en temps réel des informations générées automatiquement
+- Formulaires simplifiés où seules les informations nécessaires sont modifiables
+- Filtrage dynamique des options en fonction des sélections de l'utilisateur
 - Affichage des labels sans retour à la ligne (nowrap)
-- Injection de JavaScript via un template personnalisé
-- API pour récupérer dynamiquement les informations des classes de compte
+- Injection de JavaScript via des templates personnalisés
+- API pour récupérer dynamiquement les informations des classes et groupes de comptes
 
 ## Avancées Techniques
 
@@ -210,10 +224,11 @@ L'application utilise une architecture modulaire qui:
 
 ### Plan Comptable OHADA
 
-**Nouveauté**: Implémentation complète du plan comptable OHADA :
-- Dictionnaires contenant les noms et descriptions normalisés des classes de compte
+**Fonctionnalité**: Implémentation complète du plan comptable OHADA :
+- Dictionnaires contenant les noms et descriptions normalisés des classes et groupes de comptes
 - Règles automatiques pour déterminer la position dans le bilan (Actif, Passif, Charges, Produits)
 - Validation des numéros de compte selon les standards OHADA
+- Cohérence entre les niveaux de la hiérarchie (classes, groupes, comptes)
 
 ### Interaction JavaScript/Django
 
@@ -221,6 +236,9 @@ L'application utilise une architecture modulaire qui:
 - API Django exposée via URL personnalisée pour récupérer les informations des comptes
 - Génération dynamique d'éléments d'interface utilisateur
 - Mise à jour en temps réel des champs de prévisualisation
+- Utilisation de templates personnalisés pour injecter le JavaScript
+- Communication asynchrone avec le serveur via Fetch API
+- Manipulation du DOM pour créer des éléments d'interface dynamiquement
 
 ### Tests Unitaires
 
@@ -234,36 +252,52 @@ L'application s'intègre parfaitement avec l'interface d'administration Django t
 
 ## Prochaines Étapes
 
-1. Compléter le module des groupes de comptes:
-   - Améliorer l'interface utilisateur pour la création et la modification des groupes de comptes
-   - Implémentation des règles OHADA pour les groupes de comptes
+1. ✅ **Compléter le module des groupes de comptes**: 
+   - ✅ Améliorer l'interface utilisateur pour la création et la modification des groupes de comptes
+   - ✅ Implémentation des règles OHADA pour les groupes de comptes
+   - ✅ Prévisualisation en temps réel des informations générées automatiquement
 
-2. Compléter le module des comptes:
+2. **Compléter le module des comptes**:
    - Développer l'interface utilisateur pour la gestion des comptes individuels
+   - Implémentation du filtrage dynamique des groupes de comptes en fonction de la classe sélectionnée
+   - Prévisualisation en temps réel des informations du compte
+   - Validation automatique de la structure du numéro de compte
    - Ajouter la fonction d'importation de plan comptable
    - Ajouter des vues pour la suppression des comptes
 
-3. Développer le module des transactions:
+3. **Développer le module des transactions**:
    - Modèles pour les écritures comptables
    - Interface d'enregistrement des transactions
+   - Validation des écritures (équilibre débit/crédit)
+   - Journal des transactions
 
-4. Développer le module de reporting:
+4. **Développer le module de reporting**:
    - Génération de rapports comptables (bilan, compte de résultat)
    - Exports au format PDF, Excel
+   - Tableaux de bord avec graphiques
 
-5. Améliorer les tests:
+5. **Améliorer les tests**:
    - Atteindre une couverture de code significative
    - Ajouter des tests d'intégration
+   - Tests pour l'interface JavaScript
 
 ## Conclusion
 
-Le projet ComptaApp dispose désormais d'une architecture modulaire solide et évolutive. Le module des classes de comptes est pleinement fonctionnel avec une interface utilisateur intuitive qui respecte les règles du plan comptable OHADA. Cette base solide facilitera le développement des modules de groupes de comptes, comptes individuels, transactions et reporting.
+Le projet ComptaApp continue de progresser avec une architecture modulaire solide et évolutive. Les modules des classes et groupes de comptes sont maintenant pleinement fonctionnels avec des interfaces utilisateur intuitives qui respectent les règles du plan comptable OHADA.
 
-# Ajouter la documentation au dépôt Git
+Les avancées récentes dans l'implémentation de l'interface des groupes de comptes, avec le filtrage dynamique des options et la prévisualisation en temps réel, améliorent considérablement l'expérience utilisateur et réduisent les risques d'erreur.
+
+Cette base solide facilitera le développement des modules de comptes individuels, transactions et reporting.
+
+# Commandes Git pour mettre à jour la documentation
+
+```bash
+# Ajouter la documentation mise à jour au dépôt Git
 git add docs/documentation_technique.md
 
 # Créer un commit
-git commit -m "Ajout de la documentation technique du projet"
+git commit -m "Mise à jour de la documentation technique - Implémentation de l'interface des groupes de comptes"
 
 # Pousser vers GitHub
 git push origin main
+```
