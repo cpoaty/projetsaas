@@ -1,6 +1,7 @@
 from django.contrib import admin
 from ..models.account import Account
 
+
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     list_display = ('get_full_number', 'name', 'account_type', 'is_active')

@@ -1,0 +1,41 @@
+/* Ce fichier doit être placé dans static/accounts/css/account_class_admin.css */
+
+/* Style pour les champs de prévisualisation en lecture seule */
+.preview-field {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 8px;
+    width: 100%;
+    color: #333;
+    font-weight: normal;
+}
+
+/* Mise en évidence des informations générées automatiquement */
+#id_preview_name, #id_preview_description {
+    background-color: #f5f9ff;
+    border-left: 3px solid #2271b1;
+}
+
+/* Style pour les étiquettes des champs de prévisualisation */
+label[for="id_preview_name"], label[for="id_preview_description"] {
+    color: #2271b1;
+    font-weight: 500;
+}
+
+/* Style pour le message d'aide contextuel */
+.field-preview_name .help, .field-preview_description .help {
+    color: #666;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+/* Ajuster l'espacement des champs pour une meilleure lisibilité */
+.form-row {
+    margin-bottom: 20px;
+}
+
+/* Style pour mettre en évidence le champ numéro qui est le plus important */
+#id_number {
+    font-weight: bold;
+    font-size: 1.1em;
+}

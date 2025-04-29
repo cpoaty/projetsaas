@@ -1,0 +1,42 @@
+[
+    {
+      "model": "accounts.accountclass",
+      "pk": 1,
+      "fields": {
+        "name": "Comptes de ressources durables",
+        "description": "Regroupe les comptes de capitaux propres, provisions, emprunts et dettes financières diverses.",
+        "position_bilan": "Passif",
+        "actif": true
+      }
+    },
+    {
+      "model": "accounts.accountclass",
+      "pk": 2,
+      "fields": {
+        "name": "Comptes d'actif immobilisé",
+        "description": "Regroupe les comptes d'immobilisations incorporelles, corporelles et financières.",
+        "position_bilan": "Actif",
+        "actif": true
+      }
+    },
+    {
+      "model": "accounts.accountclass",
+      "pk": 3,
+      "fields": {
+        "name": "Comptes de stocks",
+        "description": "Regroupe les comptes de stocks de marchandises, matières premières et autres approvisionnements.",
+        "position_bilan": "Actif",
+        "actif": true
+      }
+    },
+    {
+      "model": "accounts.accountclass",
+      "pk": 4,
+      "fields": {
+        "name": "Comptes de tiers",
+        "description": "Regroupe les comptes de fournisseurs, clients et autres débiteurs ou créditeurs.",
+        "position_bilan": "Actif",
+        "actif": true
+      }
+    }
+  ]

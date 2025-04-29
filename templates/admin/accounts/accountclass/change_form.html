@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block extrahead %}
+{{ block.super }}
+{% if javascript %}
+{{ javascript|safe }}
+{% endif %}
+{% endblock %}
