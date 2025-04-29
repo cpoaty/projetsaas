@@ -1,8 +1,4 @@
-# Créer un dossier docs si nécessaire
-mkdir -p docs
-
-# Créer le fichier de documentation technique
-echo "# Documentation Technique du Projet ComptaApp
+# Documentation Technique du Projet ComptaApp
 
 ## Introduction
 
@@ -12,7 +8,7 @@ ComptaApp est une application de comptabilité développée avec le framework Dj
 
 L'application est organisée selon une architecture modulaire qui sépare clairement les préoccupations :
 
-\`\`\`
+```
 compta_project/                  # Dossier racine du projet
 │
 ├── compta_project/              # Configuration du projet Django
@@ -77,6 +73,10 @@ compta_project/                  # Dossier racine du projet
 ├── templates/                   # Templates HTML
 │   ├── base.html
 │   ├── home.html
+│   ├── admin/                   # Templates personnalisés pour l'administration
+│   │   └── accounts/
+│   │       └── accountclass/
+│   │           └── change_form.html  # Template personnalisé pour les classes de compte
 │   └── accounts/
 │       ├── account_list.html
 │       └── account_form.html
@@ -86,7 +86,7 @@ compta_project/                  # Dossier racine du projet
     ├── base.txt
     ├── development.txt
     └── production.txt
-\`\`\`
+```
 
 ## Modules et Fonctionnalités
 
@@ -94,9 +94,11 @@ compta_project/                  # Dossier racine du projet
 
 #### Modèles
 
-1. **AccountClass** - Classes de comptes (niveau 1 du plan comptable)
-   - Attributs: number (PK), name, description
-   - Exemple: 1 - Comptes de capitaux
+1. **AccountClass** - Classes de comptes (niveau 1 du plan comptable OHADA)
+   - Attributs: number (PK), name, description, position_bilan, actif, date_creation
+   - Exemple: 1 - Comptes de ressources durables
+   - **Nouveauté**: Implémentation automatique des règles OHADA pour la position dans le bilan
+   - **Nouveauté**: Génération automatique des noms et descriptions selon le plan comptable OHADA
 
 2. **AccountGroup** - Groupes de comptes (niveau 2 du plan comptable)
    - Attributs: account_class (FK), number, name, description
@@ -130,9 +132,15 @@ compta_project/                  # Dossier racine du projet
 
 #### Administration
 
-Module d'administration modulaire avec des classes personnalisées pour chaque modèle, permettant une gestion détaillée des données:
+Module d'administration modulaire avec des classes personnalisées pour chaque modèle :
 
-- AccountClassAdmin
+- **AccountClassAdmin** (Mise à jour récente)
+  - Interface améliorée avec prévisualisation en temps réel des informations OHADA
+  - Seul le numéro de classe est modifiable, tout le reste est généré automatiquement
+  - Implémentation d'une API JavaScript pour la mise à jour dynamique des informations
+  - Template personnalisé pour injecter le JavaScript nécessaire
+  - Affichage des libellés OHADA officiels dans la liste des classes
+
 - AccountGroupAdmin
 - AccountTypeAdmin
 - AccountAdmin
@@ -142,27 +150,27 @@ Module d'administration modulaire avec des classes personnalisées pour chaque m
 #### Système de paramètres multi-environnements
 
 La configuration est divisée en trois fichiers:
-- \`base.py\`: Paramètres communs à tous les environnements
-- \`development.py\`: Paramètres spécifiques au développement
-- \`production.py\`: Paramètres optimisés pour la production
+- `base.py`: Paramètres communs à tous les environnements
+- `development.py`: Paramètres spécifiques au développement
+- `production.py`: Paramètres optimisés pour la production
 
 #### Chemin Python modifié
 
-Le dossier \`apps/\` est ajouté au chemin Python pour permettre des imports plus courts et plus lisibles:
+Le dossier `apps/` est ajouté au chemin Python pour permettre des imports plus courts et plus lisibles:
 
-\`\`\`python
+```python
 import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(BASE_DIR / 'apps'))
-\`\`\`
+```
 
 ## Interfaces Utilisateur
 
 ### Template de base
 
-Un template de base (\`base.html\`) qui fournit:
+Un template de base (`base.html`) qui fournit:
 - Barre de navigation
 - Structure HTML commune
 - Chargement des CSS et JavaScript
@@ -182,6 +190,15 @@ Formulaire de création/modification de compte avec:
 - Champs pour numéro, nom et description
 - Option pour activer/désactiver un compte
 
+### Interface d'administration personnalisée
+
+**Nouveauté**: Interface d'administration améliorée pour les classes de compte :
+- Prévisualisation en temps réel du nom, de la description et de la position dans le bilan
+- Formulaire simplifié où seul le numéro est modifiable
+- Affichage des labels sans retour à la ligne (nowrap)
+- Injection de JavaScript via un template personnalisé
+- API pour récupérer dynamiquement les informations des classes de compte
+
 ## Avancées Techniques
 
 ### Architecture Modulaire
@@ -191,6 +208,20 @@ L'application utilise une architecture modulaire qui:
 - Facilite la maintenance et l'extension
 - Permet un développement parallèle des différentes parties
 
+### Plan Comptable OHADA
+
+**Nouveauté**: Implémentation complète du plan comptable OHADA :
+- Dictionnaires contenant les noms et descriptions normalisés des classes de compte
+- Règles automatiques pour déterminer la position dans le bilan (Actif, Passif, Charges, Produits)
+- Validation des numéros de compte selon les standards OHADA
+
+### Interaction JavaScript/Django
+
+**Nouveauté**: Utilisation avancée de JavaScript dans l'interface d'administration :
+- API Django exposée via URL personnalisée pour récupérer les informations des comptes
+- Génération dynamique d'éléments d'interface utilisateur
+- Mise à jour en temps réel des champs de prévisualisation
+
 ### Tests Unitaires
 
 Structure de tests mise en place (à compléter):
@@ -199,29 +230,34 @@ Structure de tests mise en place (à compléter):
 
 ### Compatibilité avec Django Admin
 
-L'application s'intègre parfaitement avec l'interface d'administration Django tout en maintenant sa structure modulaire.
+L'application s'intègre parfaitement avec l'interface d'administration Django tout en maintenant sa structure modulaire et en ajoutant des fonctionnalités personnalisées.
 
 ## Prochaines Étapes
 
-1. Compléter le module des comptes:
+1. Compléter le module des groupes de comptes:
+   - Améliorer l'interface utilisateur pour la création et la modification des groupes de comptes
+   - Implémentation des règles OHADA pour les groupes de comptes
+
+2. Compléter le module des comptes:
+   - Développer l'interface utilisateur pour la gestion des comptes individuels
    - Ajouter la fonction d'importation de plan comptable
    - Ajouter des vues pour la suppression des comptes
 
-2. Développer le module des transactions:
+3. Développer le module des transactions:
    - Modèles pour les écritures comptables
    - Interface d'enregistrement des transactions
 
-3. Développer le module de reporting:
+4. Développer le module de reporting:
    - Génération de rapports comptables (bilan, compte de résultat)
    - Exports au format PDF, Excel
 
-4. Améliorer les tests:
+5. Améliorer les tests:
    - Atteindre une couverture de code significative
    - Ajouter des tests d'intégration
 
 ## Conclusion
 
-Le projet ComptaApp dispose désormais d'une architecture modulaire solide et évolutive. Le module des comptes est fonctionnel et permet déjà la gestion du plan comptable, constituant une base robuste pour le développement futur des modules de transactions et de reporting." > docs/documentation_technique.md
+Le projet ComptaApp dispose désormais d'une architecture modulaire solide et évolutive. Le module des classes de comptes est pleinement fonctionnel avec une interface utilisateur intuitive qui respecte les règles du plan comptable OHADA. Cette base solide facilitera le développement des modules de groupes de comptes, comptes individuels, transactions et reporting.
 
 # Ajouter la documentation au dépôt Git
 git add docs/documentation_technique.md
