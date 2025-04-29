@@ -3,8 +3,8 @@ from django import forms
 from django.http import JsonResponse
 from django.urls import path
 from django.utils.html import format_html
-from ..models.account_group import AccountGroup
-from ..models.account_class import AccountClass
+from accounts.models.account_group import AccountGroup
+from accounts.models.account_class import AccountClass
 
 class AccountGroupForm(forms.ModelForm):
     # Ne pas définir le champ number ici du tout

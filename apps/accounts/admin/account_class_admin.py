@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.http import JsonResponse
 from django.urls import path
-from ..models.account_class import AccountClass
+from accounts.models.account_class import AccountClass
 
 class AccountClassForm(forms.ModelForm):
     # Remplacer le champ number par un ChoiceField

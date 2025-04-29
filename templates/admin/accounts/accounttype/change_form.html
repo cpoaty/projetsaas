@@ -1,0 +1,44 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+django.jQuery(document).ready(function($) {
+    var codeField = $('#id_code');
+    var nameRow = $('.field-name');
+    
+    // Correspondance entre codes et noms
+    var typeNames = {
+        'AC': 'Actif',
+        'PA': 'Passif',
+        'CH': 'Charge',
+        'PR': 'Produit',
+        'CP': 'Capitaux propres'
+    };
+    
+    // Fonction pour mettre à jour l'affichage du nom
+    function updateNameDisplay() {
+        var code = codeField.val();
+        var name = typeNames[code] || code;
+        
+        // Trouver l'élément à mettre à jour
+        var nameElement = nameRow.find('.readonly');
+        if (!nameElement.length) {
+            // Si pas d'élément readonly, créer une div pour afficher le nom
+            nameRow.find('input').hide();
+            nameElement = $('<div class="readonly"></div>').appendTo(nameRow.find('.field-name > div'));
+        }
+        
+        // Mettre à jour l'affichage
+        nameElement.text(name);
+    }
+    
+    // Mettre à jour à chaque changement
+    codeField.on('change', updateNameDisplay);
+    
+    // Initialiser l'affichage
+    updateNameDisplay();
+});
+</script>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from ..models.account import Account
+from accounts.models.account import Account
 
 class AccountForm(forms.ModelForm):
     class Meta:
